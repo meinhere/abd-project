@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>K-Means Clustering</title>
+  </head>
+  <body>
+    <h1>K-Means Clustering</h1>
+
+    <form method="POST">
+      <label for="columns">Select Columns:</label><br />
+      {% for col in available_columns %}
+      <input
+        type="checkbox"
+        name="columns"
+        value="{{ col }}"
+        {%
+        if
+        col
+        in
+        selected_columns
+        %}checked{%
+        endif
+        %}
+      />
+      {{ col }}<br />
+      {% endfor %}
+      <br />
+
+      <label for="n_clusters">Number of Clusters:</label>
+      <input
+        type="number"
+        name="n_clusters"
+        value="{{ n_clusters }}"
+        min="1"
+      /><br /><br />
+
+      <input type="submit" value="Run Clustering" />
+    </form>
+
+    <hr />
+
+    {% if cluster_plot %}
+    <h2>Cluster Plot</h2>
+    <img src="data:image/png;base64,{{ cluster_plot }}" />
+    {% endif %} {% if map_html %}
+    <h2>Cluster Map</h2>
+    {{ map_html | safe }}
+    <!-- Render the map -->
+    {% endif %}
+  </body>
+</html>
