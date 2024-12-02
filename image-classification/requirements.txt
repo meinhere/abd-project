@@ -1,8 +1,7 @@
-absl-py==1.4.0
-Flask==3.0.3
-numpy==1.24.3
-opencv-python==4.8.0.74
-pillow==9.3.0
-scikit-learn==1.3.0
-matplotlib==3.7.2
-tensorflow==2.17.1
+absl-py
+Flask
+numpy
+opencv-python
+scikit-learn
+matplotlib
+tensorflow
