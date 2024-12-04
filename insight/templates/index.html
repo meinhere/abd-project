@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Analisa Big Data pada Tumbuhan</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container-fluid px-5 py-4">
+      <div class="content d-flex gap-5 justify-content-center">
+        <div class="right-side flex-shrink-1 d-flex gap-4 flex-column">
+          <div>
+            <h3>Menu Clustering</h3>
+            <form method="POST">
+              <p>Pilih Tahun:</p>
+
+              <ul class="list-group">
+                {% for col in available_columns %}
+
+                <li class="list-group-item">
+                  <input
+                    type="checkbox"
+                    name="columns"
+                    value="{{ col }}"
+                    id="{{ col }}"
+                    {%if
+                    col
+                    in
+                    selected_columns
+                    %}
+                    checked
+                    {%endif%}
+                  />
+                  <label class="form-check-label" for="{{ col }}"
+                    >{{ col }}</label
+                  >
+                </li>
+
+                {% endfor %}
+              </ul>
+
+              <button type="submit" class="btn btn-primary mt-3">
+                <i class="fa fa-share"></i>
+                Run Clustering
+              </button>
+            </form>
+          </div>
+
+          <div>
+            <h3>Menu Klasifikasi</h3>
+
+            <div class="d-flex flex-column gap-2">
+              <a href="/klasifikasi-gambar" class="link-secondary"
+                >Klasifikasi Gambar</a
+              >
+              <a href="/klasifikasi-teks" class="link-secondary"
+                >Klasifikasi Teks</a
+              >
+            </div>
+          </div>
+        </div>
+        <div id="map" class="flex-grow-1">
+          {% if map_html %} {{ map_html | safe }} {% endif %}
+        </div>
+        <div id="data"></div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

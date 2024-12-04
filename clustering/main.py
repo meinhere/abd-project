@@ -35,27 +35,27 @@ def index():
     map_html = None  # Initialize map_html
     n_clusters = 3
 
-    if request.method == "POST":
-        selected_columns = request.form.getlist("columns")
-        n_clusters = int(request.form.get("n_clusters", 3))
+    selected_columns = request.form.getlist("columns") if request.method == "POST" else ['2017']
+    n_clusters = int(request.form.get("n_clusters", 3))
 
-        if selected_columns:
-            features, features_scaled = perform_kmeans(selected_columns)
+    if selected_columns:
+        features, features_scaled = perform_kmeans(selected_columns)
 
-            kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=300, n_init=10, random_state=42)
-            cluster_labels = kmeans.fit_predict(features_scaled)
-            features['Cluster'] = cluster_labels
+        kmeans = KMeans(n_clusters=n_clusters, init='k-means++', max_iter=300, n_init=10, random_state=42)
+        cluster_labels = kmeans.fit_predict(features_scaled)
+        features['Cluster'] = cluster_labels
 
-            # Generate cluster plot
-            cluster_plot = create_cluster_plot(selected_columns, features, features_scaled)
 
-            # Generate map
-            map_html = create_map(main_df['Provinsi'], features)
+        # Generate cluster plot
+        # cluster_plot = create_cluster_plot(selected_columns, features, features_scaled)
+
+        # Generate map
+        map_html = create_map(main_df['Provinsi'], features)
 
     # Available columns for selection
     available_columns = main_df.columns.tolist()[1:]
 
-    return render_template("index.html", available_columns=available_columns, selected_columns=selected_columns, cluster_plot=cluster_plot, map_html=map_html, n_clusters=n_clusters)
+    return render_template("index.html", available_columns=available_columns, selected_columns=selected_columns, map_html=map_html, n_clusters=n_clusters)
 
 
 def perform_kmeans(selected_columns):
@@ -119,7 +119,7 @@ def create_map(provinces, features):
     df = pd.DataFrame({"provinsi": provinces.tolist(), "cluster": features['Cluster'].tolist()})
     gdf = gdf.merge(df, left_on="state", right_on="provinsi", how="left")
 
-    m = folium.Map(location=[-2.5, 118], zoom_start=5)
+    m = folium.Map(location=[-0.7893, 113.9213], zoom_start=5)
     folium.Choropleth(
         geo_data=gdf.to_json(),  # Directly convert to JSON
         data=df,
@@ -128,13 +128,14 @@ def create_map(provinces, features):
         fill_color="YlGnBu",
         fill_opacity=0.7,
         line_opacity=0.2,
-        legend_name="Cluster"
+        legend_name="Cluster" 
     ).add_to(m)
 
     for index, row in gdf.iterrows():
+        labels_cluster = {0: 'Rendah', 1: 'Tinggi', 2: 'Sedang'}
         folium.Marker(
             location=[row.geometry.centroid.y, row.geometry.centroid.x],
-            popup=f"{row['provinsi']}, Cluster: {row['cluster']}",
+            popup=f"{row['provinsi']}, Cluster: {labels_cluster[row['cluster']]}",
         ).add_to(m)
 
 
