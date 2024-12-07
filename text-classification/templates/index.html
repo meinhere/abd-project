@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Sentimen</title>
+</head>
+<body>
+    <h1>PENGEMBANGAN TUMBUHAN DI INDONESIA</h1>
+
+    <!-- Form untuk prediksi satu ulasan -->
+    <h2>TUMBUHAN OBAT</h2>
+    <form action="/predict" method="post">
+        <textarea name="ulasan" rows="5" cols="40" placeholder="Masukkan ulasan di sini"></textarea>
+        <br>
+        <button type="submit">Prediksi</button>
+    </form>
+
+    <!-- Form untuk mengunggah file CSV -->
+    <h2>Prediksi Sentimen untuk Banyak Ulasan (Batch)</h2>
+    <form action="/batch_predict" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv">
+        <br>
+        <button type="submit">Upload dan Prediksi</button>
+    </form>
+</body>
+</html>
