@@ -32,15 +32,13 @@ def predict_sentiment(sentence):
 def process_csv(file):
     try:
         # Membaca file dengan encoding 'utf-8'
-        df = pd.read_csv(file, encoding='utf-8', on_bad_lines='skip')
+        df = pd.read_csv(file, encoding='utf-8', on_bad_lines='skip', delimiter=';')
     except UnicodeDecodeError:
         # Jika gagal, gunakan encoding alternatif 'latin-1'
-        df = pd.read_csv(file, encoding='latin-1', on_bad_lines='skip')
+        df = pd.read_csv(file, encoding='latin-1', on_bad_lines='skip', delimiter=';')
     except pd.errors.ParserError as e:
         return None, None, f"Kesalahan parsing file CSV: {e}"
     
-    print(df.columns)
-
     if 'Ulasan' in df.columns:
         df['Ulasan'] = df['Ulasan'].fillna("")
         df['processed_content'] = df['Ulasan'].apply(preprocess_text)

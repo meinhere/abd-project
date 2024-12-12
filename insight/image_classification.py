@@ -10,7 +10,7 @@ def load_and_process_image(image_path, target_size=(100, 100)):
     edges = cv2.Canny(gray, 100, 200)
     return edges.flatten() / 255.0
 
-# Fungsi untuk mengklasifikasikan gambar
+# Fungsi untuk mengklasifikasikan gambar 
 def classify_image(processed_image):
     # Memuat model
     MODEL_PATH = 'models/lvq-model.keras'

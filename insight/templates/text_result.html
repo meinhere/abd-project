@@ -24,6 +24,7 @@
     <div class="container py-5">
       <h2 class="text-center mb-4">Hasil Prediksi Sentimen</h2>
       <!-- Tabel hasil prediksi -->
+      {% if ulasan %}
       <table class="table table-striped table-hover">
         <thead>
           <tr>
@@ -38,6 +39,23 @@
           </tr>
         </tbody>
       </table>
+      {% elif positive_percentage %}
+      <table class="table table-striped table-hover text-center">
+        <thead>
+          <tr>
+            <th>Presentase Ulasan Positif</th>
+            <th>Presentase Ulasan Negatif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-success">{{ positive_percentage }}%</td>
+            <td class="text-danger">{{ negative_percentage }}%</td>
+          </tr>
+        </tbody>
+      </table>
+      {% endif %}
+
 
       <!-- Tombol kembali -->
       <div class="text-center">

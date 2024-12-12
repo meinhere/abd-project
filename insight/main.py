@@ -114,8 +114,8 @@ def klasifikasi_batch():
     if positive_percentage is not None:
         result_csv = processed_df.to_csv(index=False)
         return render_template('text_result.html', 
-                               positive_percentage=positive_percentage, 
-                               negative_percentage=negative_percentage,
+                               positive_percentage=round(positive_percentage, 2), 
+                               negative_percentage=round(negative_percentage, 2),
                                result_csv=result_csv)
     elif isinstance(processed_df, str):
         return redirect(url_for('klasifikasi_teks', error=processed_df))

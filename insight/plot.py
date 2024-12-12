@@ -44,33 +44,54 @@ def create_map(provinces, features, predictions):
     df = pd.DataFrame({"provinsi": provinces.tolist(), "cluster": features['Cluster'].tolist()})
     gdf = gdf.merge(df, left_on="state", right_on="provinsi", how="left")
 
-    m = folium.Map(location=[-0.7893, 113.9213], zoom_start=5)
-    folium.Choropleth(
-        geo_data=gdf.to_json(),  # Directly convert to JSON
-        data=df,
-        columns=["provinsi", "cluster"],
-        key_on="feature.properties.state",
-        fill_color="YlGnBu",
-        fill_opacity=0.7,
-        line_opacity=0.2,
-        legend_name="Cluster" 
+    m = folium.Map(location=[-0.7893, 113.9213], zoom_start=5, min_zoom=4, max_zoom=10)
+    # folium.Choropleth(
+    #     geo_data=gdf.to_json(),  # Directly convert to JSON
+    #     data=df,
+    #     columns=["provinsi", "cluster"],
+    #     key_on="feature.properties.state",
+    #     fill_color="YlGnBu",
+    #     fill_opacity=0.7,
+    #     line_opacity=0.2,
+    #     legend_name="Cluster" 
+    # ).add_to(m)
+    cluster_colors = {0: 'green', 1: 'red', 2: 'blue'}
+    folium.GeoJson(
+        gdf,
+        style_function=lambda feature: {
+            'fillColor': cluster_colors.get(feature['properties']['cluster'], 'gray'),
+            'color': 'black',
+            'weight': 1,
+            'fillOpacity': 0.6,
+        }
     ).add_to(m)
 
+    # Add a legend to the map
+    legend_html = """
+    <div style="position: fixed; 
+                bottom: 15px; left: 15px; width: 150px; height: 90px; 
+                border:2px solid grey; z-index:9999; font-size:14px;
+                background-color:white; opacity: 0.8;">
+    &nbsp;<b>Cluster MPP Cabai</b><br>
+    &nbsp;<i class="fa fa-circle" style="color:green"></i>&nbsp;Rendah<br>
+    &nbsp;<i class="fa fa-circle" style="color:red"></i>&nbsp;Tinggi<br>
+    &nbsp;<i class="fa fa-circle" style="color:blue"></i>&nbsp;Sedang<br>
+    </div>
+    """
+    m.get_root().html.add_child(folium.Element(legend_html))
+
     for index, row in gdf.iterrows():
-        labels_cluster = {0: 'Rendah', 1: 'Tinggi', 2: 'Sedang'}
 
         provinsi = row['provinsi']
-        cluster = labels_cluster[row['cluster']]
         prediction_image = predictions[provinsi]['image']
         prediction_data = predictions[provinsi]['data']
 
         html = f"""
-        <div style="min-width: 750px">
-            <div class="modal-dialog modal-lg">
+        <div>
+            <div class="modal-dialog modal-lg" style="min-width: 500px">
                 <div class="modal-content">
                 <div class="modal-header mb-2">
-                    <h2 id="predictionModalLabel">Hasil Prediksi Produksi Padi <span id="province-name">({provinsi})</span></h2>
-                    <h3 id="predictionModalLabel">Cluster MPP Cabai: <span id="cluster-name">{cluster}</span></h3>
+                    <h4 id="predictionModalLabel">Hasil Prediksi Produksi Padi <span id="province-name">({provinsi})</span></h4>
                 </div>
                 <div class="modal-body">
                     <div id="chart" class="mb-4">
