@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Analisa Big Data pada Tumbuhan</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -19,15 +22,16 @@
   </head>
   <body>
     <div class="container-fluid px-5 py-4">
-      <h2 class="text-center pb-3">Analisa Big Data Pada Tanaman</h2>
-      <div class="content d-flex gap-5 justify-content-center">
-        <div class="right-side flex-shrink-1 d-flex gap-4 flex-column">
-          <div>
-            <h3>Menu Clustering</h3>
-            <form method="POST">
+      <h2 class="text-center pb-3">Analisa Big Data Pada Tumbuhan</h2>
+      <div class="content row justify-content-center">
+        <div class="right-side col-12 col-md-3">
+          <div class="clustering mb-3">
+            <h3>Clustering MPP</h3>
+            <p>Margin Perdagangan dan Pengangkutan Komoditas Cabai</p>
+            <form action="" method="POST">
               <p>Pilih Tahun:</p>
 
-              <ul class="list-group">
+              <ul class="list-group mw-75">
                 {% for col in available_columns %}
 
                 <li class="list-group-item">
@@ -54,25 +58,25 @@
 
               <button type="submit" class="btn btn-primary mt-3">
                 <i class="fa fa-share"></i>
-                Run Clustering
+                Jalankan
               </button>
             </form>
           </div>
 
-          <div>
-            <h3>Menu Klasifikasi</h3>
+          <div class="classification">
+            <h3>Klasifikasi</h3>
 
             <div class="d-flex flex-column gap-2">
               <a href="/klasifikasi-gambar" class="link-secondary"
-                >Klasifikasi Gambar</a
+                >Penyakit Daun Cabai</a
               >
               <a href="/klasifikasi-teks" class="link-secondary"
-                >Klasifikasi Teks</a
+                >Ulasan Tumbuhan Obat</a
               >
             </div>
           </div>
         </div>
-        <div id="map" class="flex-grow-1">
+        <div id="map" class="left-side col-12 col-md-9 mt-4 mt-md-0">
           {% if map_html %} {{ map_html | safe }} {% endif %}
         </div>
         <div id="data"></div>

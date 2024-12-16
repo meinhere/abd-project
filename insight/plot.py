@@ -43,7 +43,7 @@ def create_map(provinces, features, predictions):
     gdf = gpd.read_file("dataset/indonesia.geojson")  # Path to GeoJSON
     df = pd.DataFrame({"provinsi": provinces.tolist(), "cluster": features['Cluster'].tolist()})
     gdf = gdf.merge(df, left_on="state", right_on="provinsi", how="left")
-
+    count_cluster = features['Cluster'].value_counts()
     m = folium.Map(location=[-0.7893, 113.9213], zoom_start=5, min_zoom=4, max_zoom=10)
     # folium.Choropleth(
     #     geo_data=gdf.to_json(),  # Directly convert to JSON
@@ -67,15 +67,15 @@ def create_map(provinces, features, predictions):
     ).add_to(m)
 
     # Add a legend to the map
-    legend_html = """
+    legend_html = f"""
     <div style="position: fixed; 
-                bottom: 15px; left: 15px; width: 150px; height: 90px; 
-                border:2px solid grey; z-index:9999; font-size:14px;
+                top: 15px; right: 15px; width: 170px; height: 90px; 
+                border:2px solid grey; z-index:999; font-size:14px;
                 background-color:white; opacity: 0.8;">
-    &nbsp;<b>Cluster MPP Cabai</b><br>
-    &nbsp;<i class="fa fa-circle" style="color:green"></i>&nbsp;Rendah<br>
-    &nbsp;<i class="fa fa-circle" style="color:red"></i>&nbsp;Tinggi<br>
-    &nbsp;<i class="fa fa-circle" style="color:blue"></i>&nbsp;Sedang<br>
+    &nbsp;<b>Keterangan Cluster</b><br>
+    &nbsp;<i class="fa fa-circle" style="color:green"></i>&nbsp;Rendah: {count_cluster[0]} provinsi<br>
+    &nbsp;<i class="fa fa-circle" style="color:red"></i>&nbsp;Tinggi : {count_cluster[1]} provinsi<br>
+    &nbsp;<i class="fa fa-circle" style="color:blue"></i>&nbsp;Sedang : {count_cluster[2]} provinsi<br>
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
@@ -102,12 +102,12 @@ def create_map(provinces, features, predictions):
                     <table class="table table-striped">
                     <thead>
                         <tr>
-                        <th>Year</th>
-                        <th>Predicted Production</th>
+                        <th>Tahun</th>
+                        <th>Prediksi Produksi</th>
                         </tr>
                     </thead>
                     <tbody id="prediction-data">
-                        {"".join([f"<tr><td>{data['Year']}</td><td>{data['Produksi']:,}</td></tr>" for data in prediction_data])}
+                        {"".join([f"<tr><td>{data['Year']}</td><td>{data['Produksi']:,} kg</td></tr>" for data in prediction_data])}
                     </tbody>
                     </table>
                 </div>

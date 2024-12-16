@@ -21,6 +21,7 @@ mpp_df = preprocess_mpp_data(mpp_df)
 # Load data padi
 padi_df = pd.read_csv('dataset/padi.csv', delimiter=",")
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
 
