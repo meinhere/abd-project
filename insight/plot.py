@@ -55,7 +55,7 @@ def create_map(provinces, features, predictions):
     #     line_opacity=0.2,
     #     legend_name="Cluster" 
     # ).add_to(m)
-    cluster_colors = {0: 'green', 1: 'red', 2: 'blue'}
+    cluster_colors = {0: 'green', 1: 'red', 2: 'blue'} if features.shape[1] < 5 else {0: 'red', 1: 'green', 2: 'blue'}
     folium.GeoJson(
         gdf,
         style_function=lambda feature: {
@@ -73,9 +73,9 @@ def create_map(provinces, features, predictions):
                 border:2px solid grey; z-index:999; font-size:14px;
                 background-color:white; opacity: 0.8;">
     &nbsp;<b>Keterangan Cluster</b><br>
-    &nbsp;<i class="fa fa-circle" style="color:green"></i>&nbsp;Rendah: {count_cluster[0]} provinsi<br>
-    &nbsp;<i class="fa fa-circle" style="color:red"></i>&nbsp;Tinggi : {count_cluster[1]} provinsi<br>
-    &nbsp;<i class="fa fa-circle" style="color:blue"></i>&nbsp;Sedang : {count_cluster[2]} provinsi<br>
+    &nbsp;<i class="fa fa-circle" style="color:green"></i>&nbsp;Rendah: {count_cluster[0] if features.shape[1] < 5 else count_cluster[1]} provinsi<br>
+    &nbsp;<i class="fa fa-circle" style="color:red"></i>&nbsp;Tinggi: {count_cluster[1] if features.shape[1] < 5 else count_cluster[0]} provinsi<br>
+    &nbsp;<i class="fa fa-circle" style="color:blue"></i>&nbsp;Sedang: {count_cluster[2]} provinsi<br>
     </div>
     """
     m.get_root().html.add_child(folium.Element(legend_html))
